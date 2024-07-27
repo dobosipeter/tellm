@@ -30,11 +30,13 @@ def main():
 
     print("Chat interface started. Type 'exit' to quit.")
     while True:
-        user_input = input("You: ")
+        print("\n")
+        user_input = input("You: \n")
         if user_input.lower() == 'exit':
             break
         response = send_message(user_input)
-        print(f"Assistant: {response}")
+        print("\n")
+        print(f"Assistant: \n{response}")
 
     print("Chat ended.")
 
