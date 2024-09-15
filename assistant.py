@@ -1,56 +1,55 @@
-""" Main assistant module. """
+""" Main assistant module using the hyperbolic api. """
 import os
-from fireworks.client import Fireworks
+from typing import Optional
+from openai import OpenAI
 
+SYSTEM_PROMPT = "You are a helpful assistant. Be helpful, kind and brief. Avoid being overly verbose!"
+
+def get_response(client: OpenAI, messages: list) -> Optional[str]:
+    """
+    Create a chat completion using the given list of messages and get the model's response.
+
+    :param client: The OpenAI client used to communicate with the inference provider.
+    :param messages: The list of messages in the conversation so far.
+
+    :return: The model's response.
+    """
+    chat_completion = client.chat.completions.create( # pyright: ignore [reportAttributeAccessIssue]
+            model="meta-llama/Meta-Llama-3.1-405B-Instruct",
+            messages=messages,
+            max_tokens=1024,
+            temperature=0.7
+            )
+    return chat_completion.choices[0].message.content
 
 def main() -> None:
-    """ The module's entry point. """
-    client = Fireworks(api_key=os.environ["FIREWORKS_API_KEY"])
-    conversation = []
-
-    def send_message(message: str) -> str:
-        """
-        Send a message to the model.
-
-        :param message: The message to send to the model.
-
-        :return: The response from the model.
-        """
-        conversation.append({"role": "user", "content": message})
-
-        try:
-            response = client.chat.completions.create(
-                model="accounts/fireworks/models/llama-v3p1-405b-instruct",
-                messages=conversation,
-                max_tokens=1024,
-                temperature=0.7,
-                top_p=1,
-                stream=False
+    """ The module's entrypoint. """
+    client = OpenAI(
+            api_key=os.environ["HYPERBOLIC_API_KEY"],
+            base_url="https://api.hyperbolic.xyz/v1"
             )
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
 
-            reply = response.choices[0].message.content
-            conversation.append({"role": "assistant", "content": reply})
-            return reply
-        except Exception as e:
-            return f"Error: {str(e)}"
-
-    print("Chat interface started. Type 'exit' to quit.")
+    print("Chat interface started. Type 'exit' to quit, 'clear' to clear conversation history.\n")
     while True:
-        print("\n")
-        user_input = input("You: \n")
-        if user_input.lower() == 'exit':
+        user_input = input("Your message: \n")
+        if user_input.lower() == "exit":
             break
-        if user_input.lower() == 'clear':
-            print("Clearing conversation history and starting a new conversation.\n")
-            conversation.clear()
+        if user_input.lower() == "clear":
+            print("Clearing conversation history and starting new conversation.")
+            messages.clear()
+            messages.append({"role": "system", "content": SYSTEM_PROMPT})
             continue
-        response = send_message(user_input)
-        print("\n")
-        print(f"Assistant: \n{response}")
 
-    print("Chat ended.")
+        messages.append({"role": "user", "content": user_input})
+        response = get_response(client, messages)
+        if response:
+            print(f"Assistant: \n{response}")
+            messages.append({"role": "assistant", "content": response})
+        else:
+            print("Empty response from model, terminating!")
+            break
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-
