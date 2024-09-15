@@ -3,7 +3,7 @@ import os
 from typing import Optional
 from openai import OpenAI
 
-SYSTEM_PROMPT = "You are a helpful assistant. Be helpful, kind and brief. Avoid being overly verbose!"
+SYSTEM_PROMPT = "You are a helpful assistant. Be helpful and kind."
 
 def get_response(client: OpenAI, messages: list) -> Optional[str]:
     """
