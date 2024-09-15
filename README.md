@@ -1,20 +1,25 @@
 # TELLM  
   
-TeLLM is a basic terminal application used to communicate with remotely hosted LLM APIs through an inference API.  
-_Currently only supports [fireworks.ai](https://fireworks.ai)._
+TeLLM is a Python based terminal application used to communicate with remotely hosted LLMs through an inference API.  
+_Using the OpenAI Python package and [Hyperbolic](https://hyperbolic.xyz/) Inference provider._  
   
 ## Usage  
 
-Set the FIREWORKS_API_KEY environment variable.  
+Set the HYPERBOLIC_API_KEY environment variable.  
 Install the dependencies  
 Execute assistant.py  
 
 ## Feature Ideas  
   
-* Markdown print/display in terminal
 * Manage conversations/sessions
+    * Export, import? change between them
+* Markdown print/display in terminal
 * Tool use support for the models
-* Different inference providers
-* Remember information about the user
+    * Remember information about the user
+    * Image input output
 * Some kind of TUI?
+    * Easily modify settings (inference provider, system prompt, etc.)
 * Proper Python Package structure
+    * Better terminal support
+        * Execute using Python by default
+        * Pass command line arguments
