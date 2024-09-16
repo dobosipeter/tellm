@@ -19,6 +19,7 @@ Execute assistant.py
     * Image input output
 * Some kind of TUI?
     * Easily modify settings (inference provider, system prompt, etc.)
+    * Better input text formatting
 * Proper Python Package structure
     * Better terminal support
         * Execute using Python by default
