@@ -26,3 +26,4 @@ Execute assistant.py
         * Pass command line arguments
 * Progress/waiting indicator while waiting for the model's response
     * If supported by the inference provider, enable streaming
+* Support for multiple models, and switching between them easily.

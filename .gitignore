@@ -1,2 +1,4 @@
 .venv/
 .pylintrc
+dist/
+*egg-info/
